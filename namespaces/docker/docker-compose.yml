@@ -1,0 +1,41 @@
+version: "3.3"
+services:
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'demo-db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    expose:
+      - '3306'
+    volumes:
+      - ~/mysql/:/var/lib/mysql
+    networks:
+      db-network:
+        ipv4_address:  10.2.0.2
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: 'password'
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    networks:
+      db-network:
+        ipv4_address:  10.2.0.3
+
+networks:
+  db-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.2.0.0/16

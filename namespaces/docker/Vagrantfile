@@ -1,0 +1,26 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "bento/ubuntu-22.04"
+
+    config.vm.provider "virtualbox" do |vb|
+        vb.memory = "2048"
+        vb.cpus    = 2
+    end
+
+    config.vm.network "forwarded_port", guest: 8080, host: 8080
+
+    config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
+
+    config.vm.provision :docker
+    config.vm.provision :docker_compose , yml: "/vagrant/docker-compose.yml", run:"always"
+
+    config.vm.provision "shell", inline: <<-SHELL
+        apt-get update
+        apt-get install bridge-utils
+        apt-get install traceroute
+        apt-get install net-tools
+    SHELL
+
+end
