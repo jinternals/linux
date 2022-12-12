@@ -1,6 +1,14 @@
 #  Network Namespace
 
-### Install disksize plugin
+### Start VM
 ```shell
-vagrant plugin install vagrant-disksize
+vagrant up
+```
+
+### Check response
+```shell
+curl locahost:8081
+```
+```shell
+curl locahost:8081
 ```
