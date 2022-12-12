@@ -51,5 +51,17 @@ ip netns exec "${NAMESPACE_PREFIX}-2" ip route add default via "${BRIDGE_IP}"
 ip netns exec "${NAMESPACE_PREFIX}-1" ping -c 2 "${NAMESPACE_2_IP}"
 ip netns exec "${NAMESPACE_PREFIX}-2" ping -c 2 "${NAMESPACE_1_IP}"
 
+ip netns exec "${NAMESPACE_PREFIX}-1" node /home/vagrant/applications/application-1/server.js 2>&1 &
+ip netns exec "${NAMESPACE_PREFIX}-2" node /home/vagrant/applications/application-2/server.js 2>&1 &
+
+sleep 10s
+
+ip netns exec "${NAMESPACE_PREFIX}-1" curl "${NAMESPACE_2_IP}:8080"
+ip netns exec "${NAMESPACE_PREFIX}-2" curl "${NAMESPACE_1_IP}:8080"
+
+
 bash -c 'echo 1' > /proc/sys/net/ipv4/ip_forward
 iptables -t nat -A POSTROUTING -s "${SUBNET}" ! -o "${BRIDGE_NAME}" -j MASQUERADE
+
+iptables -t nat -A PREROUTING -p tcp --dport 8081 -j DNAT --to-destination ${NAMESPACE_1_IP}:8080
+iptables -t nat -A PREROUTING -p tcp --dport 8082 -j DNAT --to-destination ${NAMESPACE_2_IP}:8080
