@@ -1,6 +1,6 @@
 # Linux
 
 #### Namespaces
-- [Network Namespace](namespaces)
+- [Network Namespace](networking)
   - [network](namespaces%2Fnetwork)
   - [docker](namespaces%2Fdocker)
