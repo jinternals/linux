@@ -7,5 +7,5 @@ vagrant plugin install vagrant-2. docker-compose
 
 
 ```shell
-vagrant up
+sudo vagrant up
 ```
