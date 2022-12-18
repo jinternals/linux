@@ -17,8 +17,8 @@ Vagrant.configure("2") do |config|
     end
 
     config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
-    config.vm.provision "file", source: "./application/application-1/server.js", destination: "/home/vagrant/applications/application-1/"
-    config.vm.provision "file", source: "./application/application-2/server.js", destination: "/home/vagrant/applications/application-2/"
+    config.vm.provision "file", source: "./applications/application-1/server.js", destination: "/home/vagrant/applications/application-1/"
+    config.vm.provision "file", source: "./applications/application-2/server.js", destination: "/home/vagrant/applications/application-2/"
 
     config.vm.provision "shell", inline: <<-SHELL
         apt-get update

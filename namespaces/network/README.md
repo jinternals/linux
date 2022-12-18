@@ -2,7 +2,7 @@
 
 ### Start VM
 ```shell
-vagrant up
+sudo vagrant up
 ```
 
 ### Check response

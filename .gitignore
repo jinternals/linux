@@ -100,3 +100,6 @@ fabric.properties
 *.box
 
 # End of https://www.toptal.com/developers/gitignore/api/vagrant,intellij+all
+/namespaces/k8s/scripts/cluster-key.pub
+/namespaces/k8s/scripts/cluster-key
+/namespaces/k8s/configs/
