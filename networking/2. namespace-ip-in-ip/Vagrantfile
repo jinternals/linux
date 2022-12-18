@@ -1,0 +1,34 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "bento/ubuntu-22.04"
+
+    config.vm.provider "virtualbox" do |vb|
+        vb.memory = "2048"
+        vb.cpus   = 2
+    end
+
+    config.vm.network "forwarded_port", guest: 8081, host: 8081
+    config.vm.network "forwarded_port", guest: 8082, host: 8082
+
+    Vagrant.configure(2) do |config|
+        config.vm.provision "shell", inline: "sudo mkdir /application && chmod 777 -R /application"
+    end
+
+    config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
+    config.vm.provision "file", source: "./applications/application-1/server.js", destination: "/home/vagrant/applications/application-1/"
+    config.vm.provision "file", source: "./applications/application-2/server.js", destination: "/home/vagrant/applications/application-2/"
+
+    config.vm.provision "shell", inline: <<-SHELL
+        apt-get update
+        apt-get install bridge-utils -y
+        apt-get install traceroute -y
+        apt-get install net-tools -y
+        apt-get install nodejs -y
+    SHELL
+
+    config.vm.provision "shell", path: "scripts/setup-ns.sh"
+
+
+end
